@@ -24,6 +24,12 @@ jobs:
       - name: Run Tests
         run: npm test
 
+      - name: Display Deployment Start
+        run: echo "Starting deployment to Azure..."  # Output message to indicate the start of the deployment
+
+      - name: Deploy to Azure App Service
+        run: echo "Deploying code to Azure App Service..."  # Output message for progress tracking
+
       - name: Deploy to Azure App Service
         uses: azure/webapps-deploy@v2
         with:
