@@ -7,7 +7,7 @@ on:                             # The workflow will trigger when code is pushed
 
 jobs:                           
   cleanup:                      # The name of the job
-    runs-on: ubuntu-latest       # The environment in which the job runs
+    runs-on: ubuntu-latest      # The environment in which the job runs
 
     steps:                      
       - name: Checkout Repository    
@@ -16,4 +16,8 @@ jobs:
       - name: Delete Old Log Files  
         run: |                     
           echo "Deleting log files older than 7 days..."  # Print message to log
-          find logs/ -type f -mtime +7 -delete            # Finds and deletes files older than 7 days in the 'logs' directory
+          if [ -d "logs/" ]; then
+            find logs/ -type f -mtime +7 -delete          # Finds and deletes files older than 7 days in the 'logs' directory
+          else
+            echo "Directory logs/ does not exist."        # Print message if directory does not exist
+          fi
