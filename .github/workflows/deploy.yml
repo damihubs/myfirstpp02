@@ -4,6 +4,10 @@ on:
     branches:
       - main
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -15,10 +19,7 @@ jobs:
       - name: Log in to Azure
         uses: azure/login@v1
         with:
-          client-id: ${{ fromJson(secrets.AZURE_CREDENTIALS2).clientId }}
-          tenant-id: ${{ fromJson(secrets.AZURE_CREDENTIALS2).tenantId }}
-          subscription-id: ${{ fromJson(secrets.AZURE_CREDENTIALS2).subscriptionId }}
-          client-secret: ${{ fromJson(secrets.AZURE_CREDENTIALS2).clientSecret }}
+          creds: ${{ secrets.AZURE_CREDENTIALS2 }}
 
       - name: Run Tests
         run: npm test
