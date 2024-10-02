@@ -1,0 +1,14 @@
+name: Format Code      # The name of the workflow
+
+on: push               # The workflow will trigger on every push
+
+jobs:
+  format:
+    runs-on: ubuntu-latest   # Specify the environment to run the job
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2    # Check out the repository code
+
+      - name: Run Code Formatter      # Add a code formatting step
+        run: npm run format           # Command to format your code (adjust this based on your formatter) 
