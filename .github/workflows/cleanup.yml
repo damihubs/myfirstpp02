@@ -21,3 +21,22 @@ jobs:
           else
             echo "Directory logs/ does not exist."        # Print message if directory does not exist
           fi
+
+      - name: Delete Temporary Files          # New cleanup task for temp files
+        run: |
+          echo "Deleting temp files older than 7 days..."  # Print message to log
+          if [ -d "temp/" ]; then
+            find temp/ -type f -mtime +7 -delete           # Find and delete temp files older than 7 days
+          else
+            echo "Directory temp/ does not exist."         # Print message if directory does not exist
+          fi
+
+      - name: Delete Cache Files              # New cleanup task for cache files
+        run: |
+          echo "Deleting cache files older than 7 days..."  # Print message to log
+          if [ -d "cache/" ]; then
+            find cache/ -type f -mtime +7 -delete           # Find and delete cache files older than 7 days
+          else
+            echo "Directory cache/ does not exist."         # Print message if directory does not exist
+          fi
+
