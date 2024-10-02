@@ -15,20 +15,23 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Log in to Azure                 # Log in to Azure using the service principal credentials
+      - name: Parse Azure Credentials
+        id: parse_creds
+        run: echo "${{ toJSON(secrets.AZURE_CREDENTIALS) }}" | jq '.clientId, .clientSecret, .subscriptionId, .tenantId'
+
+      - name: Log in to Azure
         uses: azure/login@v1
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
-          client-secret: ${{ secrets.AZUREAPPSERVICE_CLIENTSECRET }}
+          client-id: ${{ fromJson(secrets.AZURE_CREDENTIALS).clientId }}         
+          tenant-id: ${{ fromJson(secrets.AZURE_CREDENTIALS).tenantId }}
+          subscription-id: ${{ fromJson(secrets.AZURE_CREDENTIALS).subscriptionId }}
+          client-secret: ${{ fromJson(secrets.AZURE_CREDENTIALS).clientSecret }}
 
-      - name: Run Tests                      # Add a step to run tests before deployment
-        run: npm test                        # Command to run your tests (adjust this for your language)
+      - name: Run Tests
+        run: npm test                                       # Add a step to run tests before deployment
 
-      - name: Deploy to Azure App Service     # Deploy only if tests pass
+      - name: Deploy to Azure App Service
         uses: azure/webapps-deploy@v2
         with:
-          app-name: "my-first-app02"          # Update the app name here
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          app-name: "my-first-app02"                        # Update the app name here
           package: .
