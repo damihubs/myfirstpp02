@@ -26,20 +26,21 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS2 }}
 
       - name: Run Tests
-        run: npm test
-        
+        run: npm test  # Adjust based on your testing framework
+
       - name: Display Deployment Start
         run: echo "Starting deployment to Azure..."  # Output message to indicate the start of the deployment
 
-      - name: Deploy to Azure App Service
+      - name: Deploying code to Azure App Service
         run: echo "Deploying code to Azure App Service..."  # Output message for progress tracking
 
-      - name: Deploy to Azure App Service
+      - name: Deploy if tests pass
+        if: success()  # Only deploy if tests pass
         uses: azure/webapps-deploy@v2
         with:
           app-name: "my-first-app02"
           package: .
-        
+
       - name: Rollback if deployment fails
         if: failure()  # Roll back if the previous step fails
         run: echo "Rolling back to the previous stable version..."
